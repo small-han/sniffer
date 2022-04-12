@@ -1,10 +1,11 @@
-from Capture.Capture_Data import CaptureData
+from Capture.Capture_Data import MainWidget
+from QtShow.QtShow import QtShow
+from PyQt5.QtWidgets import QApplication
 import time
-
+import sys
 
 if __name__ == '__main__':
-    my_capturedata=CaptureData(count=10,filter="")
-    my_capturedata.Capture()
-    time.sleep(1)
-    my_capturedata.Stop()
-
+    app = QApplication(sys.argv)
+    my_widget = MainWidget()
+    my_widget.show()
+    sys.exit(app.exec())
