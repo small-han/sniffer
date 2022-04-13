@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'designer.ui'
+# Form implementation generated from reading ui file './designer.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -16,7 +16,7 @@ class Ui_Form(object):
         Form.setObjectName("Form")
         Form.resize(1033, 567)
         self.horizontalLayoutWidget = QtWidgets.QWidget(Form)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(470, 20, 160, 31))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(470, 30, 160, 31))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -28,7 +28,7 @@ class Ui_Form(object):
         self.stop_button.setObjectName("stop_button")
         self.horizontalLayout.addWidget(self.stop_button)
         self.horizontalLayoutWidget_2 = QtWidgets.QWidget(Form)
-        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(30, 20, 160, 31))
+        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(25, 29, 160, 31))
         self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -40,7 +40,7 @@ class Ui_Form(object):
         self.count_text.setObjectName("count_text")
         self.horizontalLayout_2.addWidget(self.count_text)
         self.horizontalLayoutWidget_3 = QtWidgets.QWidget(Form)
-        self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(210, 20, 241, 31))
+        self.horizontalLayoutWidget_3.setGeometry(QtCore.QRect(210, 30, 241, 31))
         self.horizontalLayoutWidget_3.setObjectName("horizontalLayoutWidget_3")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_3)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -52,7 +52,7 @@ class Ui_Form(object):
         self.filter_text.setObjectName("filter_text")
         self.horizontalLayout_3.addWidget(self.filter_text)
         self.listView = QtWidgets.QListView(Form)
-        self.listView.setGeometry(QtCore.QRect(25, 61, 991, 461))
+        self.listView.setGeometry(QtCore.QRect(30, 80, 991, 461))
         self.listView.setObjectName("listView")
 
         self.retranslateUi(Form)
@@ -64,4 +64,9 @@ class Ui_Form(object):
         self.start_button.setText(_translate("Form", "开始嗅探"))
         self.stop_button.setText(_translate("Form", "停止嗅探"))
         self.label.setText(_translate("Form", "嗅探数目"))
+        self.count_text.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">100</p></body></html>"))
         self.label_2.setText(_translate("Form", "嗅探规则"))
