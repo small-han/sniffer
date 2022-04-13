@@ -21,8 +21,8 @@ class MainWidget(QWidget, Ui_Form):
 
         self.start_button.pressed.connect(self.capture)
         self.stop_button.pressed.connect(self.stop)
-        self.count_text.textChanged.connect(self.count_change)
-        self.listView.doubleClicked.connect(self.packet_select)
+        self.listView.clicked.connect(self.packet_select)
+        self.comboBox.activated.connect(self.show_data)
 
     """
         self.start_button = QPushButton("开始嗅探", self)
@@ -38,13 +38,45 @@ class MainWidget(QWidget, Ui_Form):
         self.stop_button.pressed.connect(self.stop)
     """
 
+    def show_data(self):
+        raw_data = str(self.packet.original)
+        decode_data = ""
+        raw_data = ""
+        box_selected = self.comboBox.currentText()
+        if box_selected == "all":
+            for i in self.layers_list:
+                raw_data += str(i.raw_packet_cache)
+                decode_data += i.name
+                decode_data += "\n"
+                for key, value in i.fields.items():
+                    decode_data += ("   " + str(key) + ":" + str(value))
+                decode_data += "\n"
+        else:
+            for i in self.layers_list:
+                if i.name == box_selected:
+                    raw_data = str(i.raw_packet_cache)
+                    decode_data += i.name
+                    decode_data += "\n"
+                    for key, value in i.fields.items():
+                        decode_data += ("   " + str(key) + ":" + str(value))
+                    decode_data += "\n"
+                else:
+                    continue
+        self.raw_text.setText(raw_data)
+        self.decode_text.setText(decode_data)
+
     def packet_select(self):
         row_index = self.listView.selectedIndexes()[0].row()
-        packet = self.packets[row_index]
+        self.packet = self.packets[row_index]
 
         self.comboBox.clear()
-
-        box_selected = self.comboBox.currentText()
+        self.get_packet_layers()
+        layer_name = [i.name for i in self.layers_list]
+        self.comboBox.addItem("all")
+        self.comboBox.addItems(layer_name)
+        self.show_data()
+        """
+        box_selected = self.comboBox.currenVtText()
         raw_data = ""
         decode_data = ""
         if box_selected == "Ether":
@@ -55,9 +87,7 @@ class MainWidget(QWidget, Ui_Form):
             raw_data, decode_data = self.decode_all(packet)
         self.raw_text.setText(raw_data)
         self.decode_text.setText(decode_data)
-
-    def count_change(self):
-        self.count = int(self.count_text.toPlainText())
+        """
 
     def set_sniffer(self, count=0, filter=""):
         self.sniffer = AsyncSniffer(count=count, filter=filter, prn=self.data_handle)
@@ -78,16 +108,15 @@ class MainWidget(QWidget, Ui_Form):
     def stop(self):
         self.sniffer.stop()
 
-    def get_packet_layers(self,packet):
-        layers_list = []
+    def get_packet_layers(self):
+        self.layers_list = []
         t = 0
         while True:
-            layer = packet.getlayer(t)
+            layer = self.packet.getlayer(t)
             if layer is None:
                 break
-            layers_list.append(layer)
+            self.layers_list.append(layer)
             t += 1
-
 
     def decode_all(self, packet):
         layers_list = []
