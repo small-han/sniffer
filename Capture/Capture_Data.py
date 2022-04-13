@@ -41,6 +41,9 @@ class MainWidget(QWidget, Ui_Form):
     def packet_select(self):
         row_index = self.listView.selectedIndexes()[0].row()
         packet = self.packets[row_index]
+
+        self.comboBox.clear()
+
         box_selected = self.comboBox.currentText()
         raw_data = ""
         decode_data = ""
@@ -74,6 +77,17 @@ class MainWidget(QWidget, Ui_Form):
 
     def stop(self):
         self.sniffer.stop()
+
+    def get_packet_layers(self,packet):
+        layers_list = []
+        t = 0
+        while True:
+            layer = packet.getlayer(t)
+            if layer is None:
+                break
+            layers_list.append(layer)
+            t += 1
+
 
     def decode_all(self, packet):
         layers_list = []
