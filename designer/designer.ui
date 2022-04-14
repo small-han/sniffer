@@ -18,7 +18,7 @@
     <rect>
      <x>470</x>
      <y>30</y>
-     <width>160</width>
+     <width>281</width>
      <height>31</height>
     </rect>
    </property>
@@ -34,6 +34,13 @@
      <widget class="QPushButton" name="stop_button">
       <property name="text">
        <string>停止嗅探</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="clearButton">
+      <property name="text">
+       <string>清空数据</string>
       </property>
      </widget>
     </item>
@@ -110,26 +117,6 @@ p, li { white-space: pre-wrap; }
      <height>22</height>
     </rect>
    </property>
-   <item>
-    <property name="text">
-     <string>all</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Ether</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>TCP</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>IP</string>
-    </property>
-   </item>
   </widget>
   <widget class="QTextEdit" name="raw_text">
    <property name="geometry">

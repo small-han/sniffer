@@ -21,6 +21,7 @@ class MainWidget(QWidget, Ui_Form):
 
         self.start_button.pressed.connect(self.capture)
         self.stop_button.pressed.connect(self.stop)
+        self.clearButton.pressed.connect(self.clear)
         self.listView.clicked.connect(self.packet_select)
         self.comboBox.activated.connect(self.show_data)
 
@@ -38,6 +39,15 @@ class MainWidget(QWidget, Ui_Form):
         self.stop_button.pressed.connect(self.stop)
     """
 
+    def clear(self):
+        self.packets = []
+        show_list = [i.summary() for i in self.packets]
+        slm = QStringListModel()
+        slm.setStringList(show_list)
+        self.listView.setModel(slm)
+        self.raw_text.clear()
+        self.decode_text.clear()
+
     def show_data(self):
         raw_data = str(self.packet.original)
         decode_data = ""
@@ -54,12 +64,19 @@ class MainWidget(QWidget, Ui_Form):
         else:
             for i in self.layers_list:
                 if i.name == box_selected:
-                    raw_data = str(i.raw_packet_cache)
-                    decode_data += i.name
-                    decode_data += "\n"
-                    for key, value in i.fields.items():
-                        decode_data += ("   " + str(key) + ":" + str(value))
-                    decode_data += "\n"
+                    if i.name == "IP":
+                        raw_data, decode_data = self.decode_ip()
+                    elif i.name == "Ethernet":
+                        raw_data, decode_data = self.decode_ether()
+                    elif i.name == "TCP":
+                        raw_data, decode_data = self.decode_tcp()
+                    else:
+                        raw_data = str(i.raw_packet_cache)
+                        decode_data += i.name
+                        decode_data += "\n"
+                        for key, value in i.fields.items():
+                            decode_data += ("   " + str(key) + ":" + str(value))
+                        decode_data += "\n"
                 else:
                     continue
         self.raw_text.setText(raw_data)
@@ -152,10 +169,10 @@ class MainWidget(QWidget, Ui_Form):
                 else:
                     data['Procotol'] = "TCP"
 
-    def decode_ip(self, packet):
+    def decode_ip(self):
         decode_data = ""
-        if packet.haslayer("IP"):
-            ip = packet.getlayer("IP")
+        if self.packet.haslayer("IP"):
+            ip = self.packet.getlayer("IP")
             decode_data += ("版本:" + str(ip.fields["version"]))
             decode_data += ("   首部长度:" + str(ip.fields["ihl"]))
             decode_data += ("   区分服务:" + str(ip.fields["tos"]))
@@ -174,10 +191,10 @@ class MainWidget(QWidget, Ui_Form):
             return "ip:无", "ip:无"
         return raw_data, decode_data
 
-    def decode_ether(self, packet):
+    def decode_ether(self):
         decode_data = ""
-        if packet.haslayer("Ether"):
-            ether = packet.getlayer("Ether")
+        if self.packet.haslayer("Ether"):
+            ether = self.packet.getlayer("Ether")
             raw_data = str(ether.raw_packet_cache)
             decode_data += ("目的地址:" + ether.fields["dst"])
             decode_data += ("   源地址:" + ether.fields["src"])
@@ -186,4 +203,20 @@ class MainWidget(QWidget, Ui_Form):
                 decode_data += ("\n类型解析为:" + str(self.type_dict[str(ether.fields["type"])]))
         else:
             return "ether:无", "ether:无"
+        return raw_data, decode_data
+
+    def decode_tcp(self):
+        decode_data = ""
+        if self.packet.haslayer("TCP"):
+            tcp = self.packet.getlayer("TCP")
+            decode_data += ("源端口:" + str(tcp.fields["sport"]))
+            decode_data += ("   目的端口:" + str(tcp.fields["dport"]))
+            decode_data += ("   序号:" + str(tcp.fields["seq"]))
+            decode_data += ("   确认号:" + str(tcp.fields["ack"]))
+            decode_data += ("   数据偏移:" + str(tcp.fields["dataofs"]))
+            decode_data += ("   保留:" + str(tcp.fields["reserved"]))
+            decode_data += ("   窗口:" + str(tcp.fields["window"]))
+            decode_data += ("   检验和:" + str(tcp.fields["chksum"]))
+            decode_data += ("   紧急指针:" + str(tcp.fields["urgptr"]))
+            raw_data = str(tcp.raw_packet_cache)
         return raw_data, decode_data
