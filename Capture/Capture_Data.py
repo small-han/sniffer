@@ -70,6 +70,8 @@ class MainWidget(QWidget, Ui_Form):
                         raw_data, decode_data = self.decode_ether()
                     elif i.name == "TCP":
                         raw_data, decode_data = self.decode_tcp()
+                    elif i.name == "UDP":
+                        raw_data, decode_data = self.decode_udp()
                     else:
                         raw_data = str(i.raw_packet_cache)
                         decode_data += i.name
@@ -219,4 +221,15 @@ class MainWidget(QWidget, Ui_Form):
             decode_data += ("   检验和:" + str(tcp.fields["chksum"]))
             decode_data += ("   紧急指针:" + str(tcp.fields["urgptr"]))
             raw_data = str(tcp.raw_packet_cache)
+        return raw_data, decode_data
+
+    def decode_udp(self):
+        decode_data = ""
+        if self.packet.haslayer("UDP"):
+            udp = self.packet.getlayer("UDP")
+            decode_data += ("源端口:" + str(udp.fields["sport"]))
+            decode_data += ("   目的端口:" + str(udp.fields["dport"]))
+            decode_data += ("   长度:" + str(udp.fields["len"]))
+            decode_data += ("   校验和:" + str(udp.fields["chksum"]))
+            raw_data = str(udp.raw_packet_cache)
         return raw_data, decode_data
